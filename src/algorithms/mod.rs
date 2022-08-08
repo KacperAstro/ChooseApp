@@ -1,49 +1,18 @@
-use crate::student::Student;
+use crate::student::{Class};
 
-pub enum Choices {
-    ONECOMMUTER,
-    ONENOTCOMMUTER,
-    TWOCOMMUTERS,
-    TWONONCOMMUTERS,
+pub struct Algorithm {
+    pub classes: Vec<Class>,
 }
 
-pub fn choosing(/*choice: Choices, */class: &Vec<Student>) -> Vec<Student> {
-    let mut commuters: Vec<Student> = Vec::new();
-    let mut non_commuters: Vec<Student> = Vec::new();
-
-    for student in class {
-        if student.is_commuting {
-            commuters.push(student.clone())
-        } else {
-            non_commuters.push(student.clone())
+impl Algorithm {
+    pub fn new() -> Self {
+        let mut classes: Vec<Class> = Vec::new();
+        for class_num in 1..=4 {
+            classes.push(Class::new_class(&format!("classes/class{}.json", class_num), class_num))
+        }
+        
+        Self {
+            classes
         }
     }
-
-    println!("Commuters: ");
-    for student in commuters {
-        println!("{}", student.name)
-    }
-    println!("\n");
-    
-    println!("Non Commuters: ");
-    for student in non_commuters {
-        println!("{}", student.name)
-    }
-/* 
-    match choice {
-        Choices::ONECOMMUTER => {
-
-        }
-        Choices::ONENOTCOMMUTER => {
-
-        }
-        Choices::TWOCOMMUTERS => {
-
-        }
-        Choices::TWONONCOMMUTERS => {
-
-        }
-    }
-*/    
-    todo!()
 }
