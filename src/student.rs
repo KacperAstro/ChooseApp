@@ -2,7 +2,6 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::json_part::read_json;
 
-#[derive(Clone)]
 pub struct Class {
     students: Vec<Student>,
     class_num: usize,
@@ -11,7 +10,7 @@ pub struct Class {
     non_commuting_amount: usize,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Student {
     pub name: String,
     pub number_duties: f32,
@@ -41,24 +40,22 @@ impl Class {
         }
     }
 
-    pub fn get_students(&self) -> Vec<Student> {
-        self.students.clone()
+    pub fn get_students(&mut self) -> &mut [Student] {
+        &mut self.students
+    }
+
+    pub fn get_commuters(&mut self) -> Vec<&mut Student> {
+        // I personally would have this method return the iterator directly, instead of turning it into a vec first.
+        // So, I’d get rid of the collect, and make the method return -> impl Iterator<Item=&mut Student>
+        self.get_students().iter_mut().filter(|x|  x.is_commuting).collect()
+    }
+
+    pub fn get_non_commuters(&mut self) -> Vec<&mut Student> {
+        self.get_students().iter_mut().filter(|x|  x.is_commuting).collect()
     }
 
     pub fn get_class_num(&self) -> usize {
         self.class_num
-    }
-
-    pub fn get_amount(&self) -> usize {
-        self.students_amount
-    }
-
-    pub fn get_commuting_amount(&self) -> usize {
-        self.commuting_amount
-    }
-
-    pub fn get_non_commuting_amount(&self) -> usize {
-        self.non_commuting_amount
     }
 }
 
