@@ -5,9 +5,8 @@ use crate::json_part::read_json;
 pub struct Class {
     students: Vec<Student>,
     class_num: usize,
-    students_amount: usize,
-    commuting_amount: usize,
-    non_commuting_amount: usize,
+    pub chosen_amount: usize,
+    pub commuters_percent: f32,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -20,23 +19,22 @@ pub struct Student {
 impl Class {
     pub fn new_class(filename: &str, class_num: usize) -> Self {
         let students = read_json(filename.to_string());
-        let students_amount: usize = students.len();
-        let mut commuting_amount: usize = 0;
-
+        
+        let mut commuters_amount = 0;
         for student in &students {
             if student.is_commuting {
-                commuting_amount += 1;
+                commuters_amount += 1;
             }
         }
-
-        let non_commuting_amount = students_amount - commuting_amount;
-
+        
+        let commuters_percent = commuters_amount as f32 / students.len() as f32;
+        let chosen_amount = 0;
+        
         Self {
              students,
-             class_num, 
-             students_amount, 
-             commuting_amount, 
-             non_commuting_amount 
+             class_num,
+             chosen_amount,
+             commuters_percent, 
         }
     }
 
